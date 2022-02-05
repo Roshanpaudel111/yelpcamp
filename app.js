@@ -19,6 +19,7 @@ app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -51,9 +52,8 @@ app.get("/campgrounds/:id/edit", async (req, res) => {
 
 app.put("/campgrounds/:id", async (req, res) => {
   const { id } = req.params;
-  const campground = await Campground.findByIdAndUpdate(id, {
-    ...req.body.campground,
-  });
+  const editedCampground = req.body;
+  const campground = await Campground.findByIdAndUpdate(id, editedCampground);
   res.redirect(`/campgrounds/${campground.id}`);
 });
 app.delete("/campgrounds/:id", async (req, res) => {

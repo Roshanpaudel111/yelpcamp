@@ -1,10 +1,47 @@
 <% layout('layout/boilerplate') %>
-<h1>Create New Campground</h1>
-<form action="/campgrounds" method="post">
-  <label for="title">Title: </label>
-  <input type="text" name="title" id="title" />
-  <label for="location">Location</label>
-  <input type="text" name="location" id="location" />
-  <button>SUBMIT!!</button>
-  <a href="/Campgrounds">Cancel</a>
-</form>
+<div class="row">
+  <h1 class="text-center">New Campground</h1>
+  <div class="col-6-offset-3">
+    <form action="/campgrounds" method="post">
+      <div class="mb-2">
+        <label class="form-label" for="title">Title: </label>
+        <input class="form-control" type="text" name="title" id="title" />
+      </div>
+      <div class="mb-2">
+        <label class="form-label" for="location">Location</label>
+        <input class="form-control" type="text" name="location" id="location" />
+      </div>
+      <div class="mb-2">
+        <label for="price" class="form-label">Campground Price</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="price-label">$</span>
+          <input
+            type="text"
+            class="form-control"
+            id="price"
+            name="price"
+            placeholder="0.00"
+            aria-label="price"
+            aria-describedby="price-label"
+          />
+        </div>
+      </div>
+      <div class="mb-2">
+        <label for="image" class="form-label">Image Url</label>
+        <input type="text" class="form-control" id="image" name="image" />
+      </div>
+      <div class="mb-2">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          name="description"
+          id="description"
+          cols="30"
+          rows="5"
+          class="form-control"
+        ></textarea>
+      </div>
+      <button class="btn btn-success my-3">Add Campground</button>
+      <a class="btn btn-danger my-3" href="/Campgrounds">Cancel</a>
+    </form>
+  </div>
+</div>
