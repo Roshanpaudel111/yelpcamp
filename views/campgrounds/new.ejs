@@ -6,20 +6,29 @@
       <div class="mb-2">
         <label class="form-label" for="title">Title: </label>
         <input class="form-control" type="text" name="title" id="title" required />
-      </div>
-      <div class="valid-feedback">
-        Looks good!
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <div class="invalid-feedback">
+          Please fill out the valid title!!
+        </div>
       </div>
       <div class="mb-2">
         <label class="form-label" for="location">Location</label>
         <input class="form-control" type="text" name="location" id="location" required/>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <div class="invalid-feedback">
+          Please fill out the valid location!!
+        </div>
       </div>
       <div class="mb-2">
         <label for="price" class="form-label">Campground Price</label>
         <div class="input-group mb-3">
           <span class="input-group-text" id="price-label">$</span>
           <input
-            type="number"
+            type="text"
             class="form-control"
             id="price"
             name="price"
@@ -28,12 +37,23 @@
             aria-describedby="price-label"
             required
           />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Price is required!!
+          </div>
         </div>
       </div>
       <div class="mb-2">
         <label for="image" class="form-label">Image Url</label>
         <input type="text" class="form-control" id="image" name="image" required />
-        
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <div class="invalid-feedback">
+          Please fill out the URL!!
+        </div>
       </div>
       <div class="mb-2">
         <label for="description" class="form-label">Description</label>
@@ -45,9 +65,38 @@
           class="form-control"
           required
         ></textarea>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <div class="invalid-feedback">
+          Please fill out the valid description!!
+        </div>
       </div>
       <button class="btn btn-success my-3">Add Campground</button>
       <a class="btn btn-danger my-3" href="/Campgrounds">Cancel</a>
     </form>
   </div>
 </div>
+
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>
