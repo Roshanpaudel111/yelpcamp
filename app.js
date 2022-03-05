@@ -1,40 +1,41 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const catchAsync = require("./utils/catchAsync");
-const ExpressError = require("./utils/expressError");
-const methodOverride = require("method-override");
-const mongoose = require("mongoose");
-const ejsMate = require("ejs-mate");
-const path = require("path");
-const Campground = require("./models/campground");
-mongoose.connect("mongodb://127.0.0.1:27017/campground");
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/expressError');
+const methodOverride = require('method-override');
+const mongoose = require('mongoose');
+const ejsMate = require('ejs-mate');
+const path = require('path');
+const Campground = require('./models/campground');
+const { diffieHellman } = require('crypto');
+mongoose.connect('mongodb://127.0.0.1:27017/campground');
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "Connection Error:"));
-db.once("open", () => {
-  console.log("Database Connected Successfully");
+db.on('error', console.error.bind(console, 'Connection Error:'));
+db.once('open', () => {
+  console.log('Database Connected Successfully');
 });
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.engine("ejs", ejsMate);
+app.engine('ejs', ejsMate);
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get("/", (req, res) => {
-  res.render("home");
+app.get('/', (req, res) => {
+  res.render('home');
 });
-app.get("/campgrounds", async (req, res) => {
+app.get('/campgrounds', async (req, res) => {
   const campgrounds = await Campground.find({});
-  res.render("campgrounds/index", { campgrounds });
+  res.render('campgrounds/index', { campgrounds });
 });
 
-app.get("/campgrounds/new", (req, res) => {
-  res.render("campgrounds/new");
+app.get('/campgrounds/new', (req, res) => {
+  res.render('campgrounds/new');
 });
 app.post(
-  "/campgrounds",
+  '/campgrounds',
   catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body);
     await campground.save();
@@ -43,25 +44,25 @@ app.post(
 );
 
 app.get(
-  "/campgrounds/:id",
+  '/campgrounds/:id',
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
-    res.render("campgrounds/show", { campground });
+    res.render('campgrounds/show', { campground });
   })
 );
 
 app.get(
-  "/campgrounds/:id/edit",
+  '/campgrounds/:id/edit',
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
-    res.render("campgrounds/edit", { campground });
+    res.render('campgrounds/edit', { campground });
   })
 );
 
 app.put(
-  "/campgrounds/:id",
+  '/campgrounds/:id',
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const editedCampground = req.body;
@@ -70,28 +71,27 @@ app.put(
   })
 );
 app.delete(
-  "/campgrounds/:id",
+  '/campgrounds/:id',
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndDelete(id);
-    res.redirect("/campgrounds");
+    res.redirect('/campgrounds');
   })
 );
 
-app.all("*", (req, res, next) => {
-  next(new ExpressError("Page Not Found", 404));
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page Not Found', 404));
 });
 
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) {
-    err.message = "Oh No!! Something Went Wrong!!!";
+    err.message = 'Oh No!! Something Went Wrong!!!';
   }
-  res.status(statusCode).render("error", { err });
+  res.status(statusCode).render('error', { err });
 });
 
 const port = 3000;
 app.listen(port, () => {
   console.log(`listening to Port:${port}`);
 });
-
