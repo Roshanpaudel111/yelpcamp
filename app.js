@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const Joi = require('joi');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/expressError');
 const methodOverride = require('method-override');
@@ -37,6 +38,18 @@ app.get('/campgrounds/new', (req, res) => {
 app.post(
   '/campgrounds',
   catchAsync(async (req, res, next) => {
+    const campgroundSchema = Joi.object({
+      title: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      description: Joi.string().required(),
+      image: Joi.string.required(),
+      location: Joi.string().required(),
+    });
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+      const msg = error.details.map((el) => el.message).join(',');
+      throw new ExpressError(msg, 404);
+    }
     const campground = new Campground(req.body);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
